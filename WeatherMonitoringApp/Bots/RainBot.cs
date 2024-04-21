@@ -12,8 +12,11 @@ public class RainBot : IBot
         _settings = botConfigurations.Value.RainBot;
     }
 
+    private static string Name => "RainBot";
+    
     public void Update(WeatherData weatherData)
     {
-        if (weatherData.Humidity > _settings.Threshold) Console.WriteLine(_settings.Message);
+        if (weatherData.Humidity > _settings.Threshold)
+            Console.WriteLine($"{Name} activated!\n{Name}: \"{_settings.Message}\"");
     }
 }
