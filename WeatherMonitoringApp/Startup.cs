@@ -25,6 +25,7 @@ public class Startup
         services.AddSingleton<IBot, SunBot>();
         services.AddSingleton<IBot, SnowBot>();
         services.AddSingleton<IWeatherDataReaderFactory, WeatherDataReaderFactory>();
+        services.AddSingleton<Application>();
         services.AddTransient<JsonWeatherDataReader>();
         services.AddTransient<XmlWeatherDataReader>();
 
@@ -37,13 +38,13 @@ public class Startup
 
             if (botConfigurations.RainBot.Enabled)
                 enabledBots.Add(bots.OfType<RainBot>().Single());
-            
+
             if (botConfigurations.SunBot.Enabled)
                 enabledBots.Add(bots.OfType<SunBot>().Single());
 
             if (botConfigurations.SnowBot.Enabled)
                 enabledBots.Add(bots.OfType<SnowBot>().Single());
-            
+
             var weatherService = new WeatherService();
             enabledBots.ForEach(bot => weatherService.Subscribe(bot));
 
