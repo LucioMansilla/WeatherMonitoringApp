@@ -12,9 +12,9 @@ public class WeatherDataReaderFactory : IWeatherDataReaderFactory
         _serviceProvider = serviceProvider;
     }
 
-    public IWeatherDataReader? CreateWeatherDataReader(string format)
+    public IWeatherDataReader? CreateWeatherDataReader(string userInput)
     {
-        format = format.ToLower();
+        var format = DetermineDataFormat(userInput);
 
         return format switch
         {
@@ -22,5 +22,17 @@ public class WeatherDataReaderFactory : IWeatherDataReaderFactory
             "xml" => _serviceProvider.GetService<XmlWeatherDataReader>(),
             _ => null
         };
+    }
+
+    private string DetermineDataFormat(string userInput)
+    {
+        if (string.IsNullOrWhiteSpace(userInput))
+            return "invalid";
+
+        userInput = userInput.Trim();
+
+        if (userInput.StartsWith("{"))
+            return "json";
+        return "<".StartsWith(userInput) ? "xml" : "invalid";
     }
 }
