@@ -33,6 +33,7 @@ public class WeatherDataReaderFactory : IWeatherDataReaderFactory
 
         if (userInput.StartsWith("{"))
             return "json";
-        return "<".StartsWith(userInput) ? "xml" : "invalid";
+        return userInput.StartsWith("<") ? "xml" : "invalid";
+
     }
 }
