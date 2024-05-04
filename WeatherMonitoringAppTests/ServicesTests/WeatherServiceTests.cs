@@ -1,3 +1,4 @@
+using AutoFixture;
 using Moq;
 using WeatherMonitoringApp.Bots;
 using WeatherMonitoringApp.Models;
@@ -7,6 +8,7 @@ namespace WeatherMonitoringAppTests.ServicesTests;
 
 public class WeatherServiceTests
 {
+    private readonly IFixture _fixture;
     private readonly Mock<IBot> _mockBot1;
     private readonly Mock<IBot> _mockBot2;
     private readonly WeatherService _weatherService;
@@ -18,13 +20,15 @@ public class WeatherServiceTests
         _mockBot1 = new Mock<IBot>();
 
         _mockBot2 = new Mock<IBot>();
+
+        _fixture = new Fixture();
     }
 
     [Fact]
     public void UpdateWeather_ShouldCallUpdateOnSubscribedBots()
     {
         // Arrange
-        var weatherData = new WeatherData { Temperature = 20, Humidity = 50 };
+        var weatherData = _fixture.Create<WeatherData>();
         _weatherService.Subscribe(_mockBot1.Object);
         _weatherService.Subscribe(_mockBot2.Object);
 
@@ -40,7 +44,7 @@ public class WeatherServiceTests
     public void UpdateWeather_ShouldNotCallUpdateOnUnsubscribedBots()
     {
         // Arrange
-        var weatherData = new WeatherData { Temperature = 20, Humidity = 50 };
+        var weatherData = _fixture.Create<WeatherData>();
         _weatherService.Subscribe(_mockBot1.Object);
 
         // Act
